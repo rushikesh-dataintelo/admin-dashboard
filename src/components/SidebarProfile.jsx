@@ -4,7 +4,6 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 export default function SidebarProfile() {
     const [admin, setAdmin] = useState({
         name: "Admin",
-        email: "admin@example.com",
         initials: "AD",
     });
 
@@ -16,7 +15,6 @@ export default function SidebarProfile() {
                 const parsedAdmin = JSON.parse(storedAdmin);
                 setAdmin({
                     name: parsedAdmin.name || "Admin",
-                    email: parsedAdmin.email || "admin@example.com",
                     initials: parsedAdmin.initials || parsedAdmin.name?.slice(0, 2).toUpperCase() || "AD",
                 });
             } catch (err) {
@@ -33,7 +31,6 @@ export default function SidebarProfile() {
                 </div>
                 <div className="flex-1">
                     <p className="text-white font-medium text-sm">{admin.name}</p>
-                    <p className="text-gray-400 text-xs">{admin.email}</p>
                 </div>
                 <ChevronRightIcon className="h-5 w-5 text-gray-400 group-hover:text-white transition-transform group-hover:translate-x-1" />
             </div>

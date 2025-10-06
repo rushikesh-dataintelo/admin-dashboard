@@ -1,62 +1,103 @@
-import React from 'react';
-import BaseLayout from '../../components/BaseLayout';
+import React, { useEffect, useState } from "react";
+import BaseLayout from "../../components/BaseLayout";
+import Breadcrumb from "../../components/Breadcrumb";
+import { getDashboardData } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 export default function WelcomePage() {
+  const [dashboardData, setDashboardData] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getDashboardData();
+        setDashboardData(response.data);
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const gradientColors = [
+    "from-indigo-500 to-purple-600",
+    "from-green-500 to-teal-600",
+    "from-yellow-500 to-orange-500",
+    "from-red-500 to-pink-500",
+    "from-blue-500 to-indigo-600",
+    "from-gray-500 to-gray-700",
+    "from-purple-500 to-pink-500",
+    "from-teal-500 to-green-500",
+  ];
+
+  const generateCards = (data) => {
+    if (!data) return [];
+
+    const cards = [];
+    let colorIndex = 0;
+
+    Object.keys(data).forEach((key) => {
+      const value = data[key];
+
+      if (typeof value === "object" && value !== null) {
+        Object.keys(value).forEach((subKey) => {
+          cards.push({
+            title: subKey
+              .replace(/([A-Z])/g, " $1")
+              .replace(/^./, (str) => str.toUpperCase()),
+            value: value[subKey],
+            color: gradientColors[colorIndex % gradientColors.length],
+            link: `/${key}/${subKey}`,
+          });
+          colorIndex++;
+        });
+      } else {
+        cards.push({
+          title: key
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (str) => str.toUpperCase()),
+          value: value,
+          color: gradientColors[colorIndex % gradientColors.length],
+          link: `/${key}`,
+        });
+        colorIndex++;
+      }
+    });
+
+    return cards;
+  };
+
+  const cards = generateCards(dashboardData);
+
+  const breadcrumbLinks = [{ label: "Dashboard", path: "/" }];
+
   return (
     <BaseLayout>
-      <div >
-        <h1 className="text-4xl font-bold text-black mb-4">
-          Welcome to TARA Dashboard
-        </h1>
-        <p className="text-gray-400 text-lg mb-8">
-          This is your main content area. The header and footer are sticky, and the sidebar
-          appears on mouse hover near the left edge or by clicking the menu button.
-        </p>
+      {/* Breadcrumb */}
+      <Breadcrumb title="Dashboard" links={breadcrumbLinks} />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-          <div className="bg-white-900/50 backdrop-blur border border-gray-800 rounded-xl p-6 hover:border-indigo-500 transition-colors">
-            <h3 className="text-xl font-semibold text-black mb-2">Feature One</h3>
-            <p className="text-gray-400">Description of your first feature goes here.</p>
-          </div>
-          <div className="bg-white-900/50 backdrop-blur border border-gray-800 rounded-xl p-6 hover:border-indigo-500 transition-colors">
-            <h3 className="text-xl font-semibold text-black mb-2">Feature One</h3>
-            <p className="text-gray-400">Description of your first feature goes here.</p>
-          </div>
-          <div className="bg-white-900/50 backdrop-blur border border-gray-800 rounded-xl p-6 hover:border-indigo-500 transition-colors">
-            <h3 className="text-xl font-semibold text-black mb-2">Feature One</h3>
-            <p className="text-gray-400">Description of your first feature goes here.</p>
-          </div>
-          <div className="bg-white-900/50 backdrop-blur border border-gray-800 rounded-xl p-6 hover:border-indigo-500 transition-colors">
-            <h3 className="text-xl font-semibold text-black mb-2">Feature One</h3>
-            <p className="text-gray-400">Description of your first feature goes here.</p>
-          </div>
-          <div className="bg-white-900/50 backdrop-blur border border-gray-800 rounded-xl p-6 hover:border-indigo-500 transition-colors">
-            <h3 className="text-xl font-semibold text-black mb-2">Feature One</h3>
-            <p className="text-gray-400">Description of your first feature goes here.</p>
-          </div>
-          <div className="bg-white-900/50 backdrop-blur border border-gray-800 rounded-xl p-6 hover:border-indigo-500 transition-colors">
-            <h3 className="text-xl font-semibold text-black mb-2">Feature One</h3>
-            <p className="text-gray-400">Description of your first feature goes here.</p>
-          </div>
-          <div className="bg-white-900/50 backdrop-blur border border-gray-800 rounded-xl p-6 hover:border-indigo-500 transition-colors">
-            <h3 className="text-xl font-semibold text-black mb-2">Feature One</h3>
-            <p className="text-gray-400">Description of your first feature goes here.</p>
-          </div>
-        </div>
+      {/* Dashboard Cards */}
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        {cards.map((card) => (
+          <div
+            key={card.title}
+            className={`p-6 rounded-2xl bg-gradient-to-r ${card.color} shadow-lg text-white flex flex-col justify-between`}
+          >
+            <div>
+              <h3 className="text-lg font-semibold">{card.title}</h3>
+              <p className="text-3xl font-bold mt-2">{card.value}</p>
+            </div>
 
-        {/* <div className="mt-12 bg-gradient-to-r from-indigo-900/50 to-purple-900/50 backdrop-blur border border-indigo-800/50 rounded-xl p-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Getting Started</h2>
-          <p className="text-gray-300 mb-4">
-            The layout is fully responsive and includes:
-          </p>
-          <ul className="text-gray-300 space-y-2">
-            <li>✓ Sticky transparent header at the top</li>
-            <li>✓ Sticky footer at the bottom</li>
-            <li>✓ Animated sidebar that opens on hover or click</li>
-            <li>✓ Full viewport height layout</li>
-            <li>✓ Modern glassmorphism effects</li>
-          </ul>
-        </div> */}
+            <button
+              onClick={() => navigate(card.link)}
+              className="mt-6 self-start px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg font-medium transition"
+            >
+              View More
+            </button>
+          </div>
+        ))}
       </div>
     </BaseLayout>
   );
