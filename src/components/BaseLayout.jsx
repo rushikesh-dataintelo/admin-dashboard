@@ -50,7 +50,7 @@ export default function BaseLayout({ children }) {
             <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
             {/* Main Content */}
-            <main className="pt-20 min-h-full relative z-10 w-full">
+            <main className="pt-8 min-h-full relative z-10 w-full">
                 <div className="w-full px-4 sm:px-6 lg:px-8">{children}</div>
             </main>
 
