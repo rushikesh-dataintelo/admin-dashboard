@@ -4,7 +4,7 @@ import client from "../components/apiClient";
 export const loginUser = async (username, password) => {
     try {
         const response = await client.post("/auth/admin/signIn", { username, password });
-        return response.data; // { success, message, data: { token, name } }
+        return response.data;
     } catch (error) {
         throw error;
     }
@@ -13,7 +13,7 @@ export const loginUser = async (username, password) => {
 export const logoutUser = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("admin");
-    window.location.href = "/login"; // Redirect to login page
+    window.location.href = "/login";
 };
 
 // Fetch dashboard data
@@ -24,4 +24,9 @@ export const getDashboardData = async () => {
     } catch (error) {
         throw error;
     }
+};
+
+export const getAdminList = async () => {
+    const response = await client.get("admin/get");
+    return response.data;
 };

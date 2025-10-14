@@ -7,11 +7,13 @@ import {
 import { menuItems } from './sidebarItems';
 import SidebarProfile from './SidebarProfile';
 import Logo from '../assets/tara-admin-logo.png';
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
     const [activeItem, setActiveItem] = useState('Dashboard');
     const [openMenus, setOpenMenus] = useState({});
     const sidebarRef = useRef(null);
+    const navigate = useNavigate();
 
     const toggleSubmenu = (name) => {
         setOpenMenus((prev) => ({
@@ -26,6 +28,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         } else {
             setActiveItem(item.name);
             setIsOpen(false);
+
+            if (item.href) {
+                navigate(item.href);
+            }
         }
     };
 
@@ -126,20 +132,21 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                                             }`}
                                     >
                                         {item.children.map((child) => (
-                                            <a
+                                            <button
                                                 key={child.name}
-                                                href={child.href}
                                                 onClick={() => {
                                                     setActiveItem(child.name);
                                                     setIsOpen(false);
+                                                    navigate(child.href);
                                                 }}
-                                                className={`block px-4 py-2 text-sm rounded-lg transition-all duration-200 ${activeItem === child.name
+                                                className={`block w-full text-left px-4 py-2 text-sm rounded-lg transition-all duration-200 ${activeItem === child.name
                                                     ? 'bg-indigo-600 text-white shadow-md'
                                                     : 'text-gray-400 hover:text-white hover:bg-gray-800/40'
                                                     }`}
                                             >
+
                                                 {child.name}
-                                            </a>
+                                            </button>
                                         ))}
                                     </div>
                                 )}
