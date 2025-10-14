@@ -32,7 +32,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen w-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100">
+        <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 px-4">
             <div className="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md">
 
                 {/* Logo */}
@@ -55,7 +55,7 @@ export default function LoginPage() {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             placeholder="Enter your username"
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+                            className="w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
                             required
                             autoComplete="username"
                         />
@@ -69,7 +69,7 @@ export default function LoginPage() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter your password"
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+                            className="w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
                             required
                             autoComplete="current-password"
                         />
